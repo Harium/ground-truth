@@ -16,6 +16,7 @@ public class BatchApplication extends ApplicationGL {
   @Override
   public void init(Graphics3D graphics3D) {
     applications.add(new SphereOrigin(w, h));
+    applications.add(new SphereScene(w, h));
   }
 
   public void display(Graphics3D graphics3D) {

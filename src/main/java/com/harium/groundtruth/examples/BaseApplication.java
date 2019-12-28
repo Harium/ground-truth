@@ -15,7 +15,7 @@ public abstract class BaseApplication extends ApplicationGL {
   }
 
   public void takeScreenShot() {
-    String filename = getClassName() + ".png";
+    String filename = getFilename() + ".png";
     FileHandle file = Gdx.files.absolute("screenshots/" + filename);
     if (file.exists()) {
       return;
@@ -52,5 +52,9 @@ public abstract class BaseApplication extends ApplicationGL {
     }
 
     return snakeCase.toString();
+  }
+
+  protected String getFilename() {
+    return getClassName();
   }
 }
