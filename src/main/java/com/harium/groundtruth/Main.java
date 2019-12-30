@@ -1,6 +1,8 @@
 package com.harium.groundtruth;
 
+import com.harium.groundtruth.examples.Rays;
 import com.harium.groundtruth.examples.SphereOrigin;
+import com.harium.groundtruth.examples.SphereRays;
 import com.harium.groundtruth.examples.SphereScene;
 import com.harium.propan.Propan;
 import com.harium.propan.core.context.ApplicationGL;
@@ -18,6 +20,6 @@ public class Main extends Propan {
   }
 
   public ApplicationGL startApplication() {
-    return new SphereScene(w, h);
+    return new Rays(w, h);
   }
 }
