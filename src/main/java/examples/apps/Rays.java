@@ -1,6 +1,7 @@
-package com.harium.groundtruth.examples;
+package examples.apps;
 
-import static com.harium.groundtruth.examples.SphereRays.whiteMaterial;
+import static com.harium.groundtruth.GridBuilder.buildGrid;
+import static examples.apps.SphereRays.whiteMaterial;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -36,6 +37,12 @@ public class Rays extends BaseApplication {
   ModelInstance rayB;
   ModelInstance rayC;
 
+  ModelInstance rayAO;
+  ModelInstance rayBO;
+  ModelInstance rayCO;
+
+  float cx, cy, fx, fy;
+
   private FPSCameraController controller;
 
   public Rays(int w, int h) {
@@ -47,11 +54,32 @@ public class Rays extends BaseApplication {
     environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1f));
 
     camera = new PerspectiveCamera(FOV, w, h);
-    camera.position.set(0, 0, 1);
+    camera.position.set(0, 0, 0);
     camera.lookAt(0, 0, -1);
     camera.near = 0.1f;
-    camera.far = 300f;
+    camera.far = 1800f;
     camera.update();
+
+    // Intrinsics
+    //cx = w / 2;
+    //cy = h / 2;
+    //fx = camera.combined.val[Matrix3.M00] * cx;
+    //fy = camera.combined.val[Matrix3.M00] * cy;
+
+    cx = 320;
+    cy = 240;
+    fx = 415.69217f;
+    fy = 311.76913f;
+
+    System.out.println("fx: " + fx);
+    System.out.println("fy: " + fy);
+    System.out.println("cx: " + cx);
+    System.out.println("cy: " + cy);
+
+    /*fx: 311.76913
+    fy: 233.82686
+    cx: 320.0
+    cy: 240.0*/
 
     controller = new FPSCameraController(camera);
 
@@ -59,12 +87,24 @@ public class Rays extends BaseApplication {
 
     modelBatch = new ModelBatch();
     ModelBuilder modelBuilder = new ModelBuilder();
+    /*Model sphere = modelBuilder.createSphere(RADIUS*2, RADIUS*2, RADIUS*2, 32, 32,
+        whiteMaterial(),
+        VertexAttributes.Usage.Position);*/
+    //this.sphere = new ModelInstance(sphere, -0.5f, 0.75f, -1f);
+
+
     Model sphere = modelBuilder.createSphere(RADIUS * 2, RADIUS * 2, RADIUS * 2, 32, 32,
         whiteMaterial(),
         VertexAttributes.Usage.Position);
-    this.sphere = new ModelInstance(sphere, 0, 0, -0.2f);
+    //this.sphere = new ModelInstance(sphere, 0, 0, -1f);
+    this.sphere = new ModelInstance(sphere, -0.5f, 0.75f+RADIUS, -2f);
 
-    buildGrid(modelBuilder);
+    float gridY = -0.1f;
+    float gridX = -4f;
+    float gridZ = -4f;
+
+    Model gridModel = buildGrid(modelBuilder, gridX, gridZ);
+    grid = new ModelInstance(gridModel, 0, gridY, 0);
 
     // Defining Rays
 
@@ -74,25 +114,50 @@ public class Rays extends BaseApplication {
     //camera.unproject()
 
     float sphereZ = -0.2f;
-    float raySize = 100;
+    float raySize = 1500;
 
-    Vector3 rA = camera.unproject(new Vector3(172, 78, sphereZ));
-    //rA.nor();
-    //rA.scl(raySize);
+    Vector3 rA = getRay(172, 78, sphereZ, raySize);
+    Vector3 rB = getRay(209, 38, sphereZ, raySize);
+    Vector3 rC = getRay(256, 80, sphereZ, raySize);
 
-    Vector3 rB = camera.unproject(new Vector3(209, 38, sphereZ));
-    //rB.nor();
-    //rB.scl(raySize);
-
-    Vector3 rC = camera.unproject(new Vector3(256, 80, sphereZ));
-    //rC.nor();
-    //rC.scl(raySize);
+    Vector3 rAO = getRay(390, 240, sphereZ, raySize);
+    Vector3 rBO = getRay(250, 240, sphereZ, raySize);
 
     MeshPartBuilder builder;
 
     rayA = rayModel(modelBuilder, rA, "Ray A");
     rayB = rayModel(modelBuilder, rB, "Ray B");
     rayC = rayModel(modelBuilder, rC, "Ray C");
+
+    rayAO = rayModel(modelBuilder, rAO, "Ray AO");
+
+    Vector3 up = new Vector3(-5.427526f,6.7517347f,-21.098787f);
+    Vector3 down = new Vector3(6.529201f,-5.1549277f,-19.245327f);
+
+    //Vector3 v = new Vector3(down).sub(up);
+
+    //v.scl(2);
+    rayAO = new ModelInstance(sphere, up.scl(0.1f));
+    rayBO = new ModelInstance(sphere, down.scl(0.1f));
+    //rayBO = rayModel(modelBuilder, v, "Ray BO");
+  }
+
+  private Vector3 getRay(int x, int y, float sphereZ, float raySize) {
+
+    //float ndcX = (float) (2.0 * x) / cx * 2 - 1.0f;
+    // Invert y to compensate screen position
+    //float ndcY = (float) -((2.0 * y) / cy * 2 - 1.0f);
+
+    float u = (x - cx) / fx;
+    float v = (y - cy) / fy;
+    Vector3 ray = new Vector3(u, -v, -1);
+
+    /*Vector3 ray = camera.unproject(new Vector3(x, y, sphereZ));
+    ray.y = -ray.y;
+    ray.z = -ray.z;*/
+    ray.nor();
+    ray.scl(raySize);
+    return ray;
   }
 
   private ModelInstance rayModel(ModelBuilder modelBuilder, Vector3 ray, String id) {
@@ -103,33 +168,6 @@ public class Rays extends BaseApplication {
     builder.line(Vector3.Zero, ray);
     Model lineModel = modelBuilder.end();
     return new ModelInstance(lineModel);
-  }
-
-  private void buildGrid(ModelBuilder modelBuilder) {
-    MeshPartBuilder builder;
-    modelBuilder.begin();
-    builder = modelBuilder.part("Grid", 1, 3, new Material());
-
-    float gridY = -0.1f;
-    float gridX = -4f;
-    float gridZ = -4f;
-
-    float spacing = 0.1f;
-    float size = 300f;
-    // Vertical Lines
-    builder.setColor(Color.GREEN);
-    for (int i = 0; i < 80; i++) {
-      builder.line(-size, 0, gridZ + spacing * i, size, 0, gridZ + spacing * i);
-    }
-
-    // Horizontal Lines
-    builder.setColor(Color.RED);
-    for (int i = 0; i < 100; i++) {
-      builder.line(gridX + spacing * i, 0, -size, gridX + spacing * i, 0, size);
-    }
-
-    Model gridModel = modelBuilder.end();
-    grid = new ModelInstance(gridModel, 0, gridY, 0);
   }
 
   private Material solidMaterial(Color color) {
@@ -165,9 +203,13 @@ public class Rays extends BaseApplication {
     modelBatch.begin(camera);
     modelBatch.render(grid, environment);
     modelBatch.render(sphere, environment);
-    modelBatch.render(rayA, environment);
-    modelBatch.render(rayB, environment);
-    modelBatch.render(rayC, environment);
+    //modelBatch.render(rayA, environment);
+    //modelBatch.render(rayB, environment);
+    //modelBatch.render(rayC, environment);
+
+    // Origin Rays
+    modelBatch.render(rayAO, environment);
+    modelBatch.render(rayBO, environment);
     modelBatch.end();
   }
 

@@ -1,8 +1,8 @@
-package com.harium.groundtruth;
+package examples;
 
-import com.harium.groundtruth.examples.BatchApplication;
 import com.harium.propan.Propan;
 import com.harium.propan.core.context.ApplicationGL;
+import examples.apps.BatchApplication;
 
 public class BatchScreenshot extends Propan {
 

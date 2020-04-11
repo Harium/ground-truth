@@ -1,4 +1,4 @@
-package com.harium.groundtruth.examples;
+package examples.apps;
 
 import com.harium.propan.core.context.ApplicationGL;
 import com.harium.propan.core.graphics.Graphics3D;

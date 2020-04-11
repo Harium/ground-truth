@@ -1,12 +1,12 @@
-package com.harium.groundtruth.examples;
+package examples.apps;
+
+import static com.harium.groundtruth.MaterialLibrary.paperMaterial;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.VertexAttributes;
 import com.badlogic.gdx.graphics.g3d.Environment;
-import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
@@ -14,10 +14,10 @@ import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.harium.propan.core.graphics.Graphics3D;
 
-public class SphereScene extends BaseApplication {
+public class SphereOrigin extends BaseApplication {
 
   private static final float FOV = 60;
-  private static final float RADIUS = 0.2f;
+  private static final float RADIUS = 0.5f;
 
   ModelBatch modelBatch;
   Environment environment;
@@ -25,7 +25,7 @@ public class SphereScene extends BaseApplication {
   Model model;
   ModelInstance instance;
 
-  public SphereScene(int w, int h) {
+  public SphereOrigin(int w, int h) {
     super(w, h);
   }
 
@@ -35,20 +35,17 @@ public class SphereScene extends BaseApplication {
 
     camera = new PerspectiveCamera(FOV, w, h);
     camera.position.set(0, 0, 0);
-    camera.lookAt(0, 0, -1);
+    camera.lookAt(0, 0, 1);
     camera.near = 0.1f;
     camera.far = 300f;
     camera.update();
 
-    Material whiteMaterial = new Material();
-    whiteMaterial.set(ColorAttribute.createDiffuse(Color.WHITE));
-
     modelBatch = new ModelBatch();
     ModelBuilder modelBuilder = new ModelBuilder();
     Model sphere = modelBuilder.createSphere(RADIUS * 2, RADIUS * 2, RADIUS * 2, 32, 32,
-        whiteMaterial,
+        paperMaterial(),
         VertexAttributes.Usage.Position);
-    instance = new ModelInstance(sphere, -0.5f, 0.75f, -2);
+    instance = new ModelInstance(sphere, 0, 0, 3);
   }
 
   public void display(Graphics3D graphics3D) {
@@ -65,8 +62,4 @@ public class SphereScene extends BaseApplication {
     modelBatch.dispose();
   }
 
-  @Override
-  protected String getFilename() {
-    return "r02x-05y075z-2";
-  }
 }

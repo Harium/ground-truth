@@ -1,11 +1,9 @@
-package com.harium.groundtruth;
+package examples;
 
-import com.harium.groundtruth.examples.Rays;
-import com.harium.groundtruth.examples.SphereOrigin;
-import com.harium.groundtruth.examples.SphereRays;
-import com.harium.groundtruth.examples.SphereScene;
 import com.harium.propan.Propan;
 import com.harium.propan.core.context.ApplicationGL;
+import examples.apps.markers.CircleMarker;
+import examples.apps.markers.GridMarker;
 
 public class Main extends Propan {
 
@@ -20,6 +18,9 @@ public class Main extends Propan {
   }
 
   public ApplicationGL startApplication() {
-    return new Rays(w, h);
+    //return new Rays(w, h);
+    // Markers
+    //return new CircleMarker(w, h);
+    return new GridMarker(w, h);
   }
 }

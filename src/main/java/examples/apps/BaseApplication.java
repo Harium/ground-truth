@@ -1,4 +1,4 @@
-package com.harium.groundtruth.examples;
+package examples.apps;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.files.FileHandle;
