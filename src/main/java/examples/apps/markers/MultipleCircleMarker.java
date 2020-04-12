@@ -3,6 +3,7 @@ package examples.apps.markers;
 import static com.harium.groundtruth.GridBuilder.buildGrid;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.g3d.Environment;
@@ -16,24 +17,27 @@ import com.harium.groundtruth.FPSCameraControllerV2;
 import com.harium.groundtruth.MarkerBuilder;
 import com.harium.propan.core.graphics.Graphics3D;
 import examples.apps.BaseApplication;
+import java.util.ArrayList;
+import java.util.List;
 
-public class GridMarker extends BaseApplication {
+public class MultipleCircleMarker extends BaseApplication {
 
   private static final float FOV = 60;
-  private static final float RADIUS = 0.2f;
 
   ModelBatch modelBatch;
   Environment environment;
 
   Model model;
   ModelInstance grid;
-  ModelInstance marker;
 
-  float cx, cy, fx, fy;
+  ModelInstance originMarker;
+  ModelInstance leftMarker;
+  ModelInstance upperMarker;
+  List<ModelInstance> markers = new ArrayList<>();
 
   private FPSCameraControllerV2 controller;
 
-  public GridMarker(int w, int h) {
+  public MultipleCircleMarker(int w, int h) {
     super(w, h);
   }
 
@@ -44,7 +48,7 @@ public class GridMarker extends BaseApplication {
     camera = new PerspectiveCamera(FOV, w, h);
     camera.position.set(0, 2, 3);
     // Do not change it
-    camera.lookAt(camera.position.x, camera.position.y, camera.position.z-1);
+    camera.lookAt(camera.position.x, camera.position.y, camera.position.z - 1);
     camera.near = 0.1f;
     camera.far = 1800f;
     camera.update();
@@ -57,8 +61,20 @@ public class GridMarker extends BaseApplication {
     modelBatch = new ModelBatch();
     ModelBuilder modelBuilder = new ModelBuilder();
 
-    Model markerModel = new MarkerBuilder().gridMarker(modelBuilder, 2, 4, 0.1f);
-    this.marker = new ModelInstance(markerModel, 0, 0, 0);
+    MarkerBuilder markerBuilder = new MarkerBuilder();
+
+    Model originMarkerModel = getMarkerModel(modelBuilder, markerBuilder, Color.BLACK);
+    this.originMarker = new ModelInstance(originMarkerModel, 0, 0, 0);
+
+    Model blueMarkerModel = getMarkerModel(modelBuilder, markerBuilder, Color.BLUE);
+    this.leftMarker = new ModelInstance(blueMarkerModel, -1, 0, 0);
+
+    Model yellowMarkerModel = getMarkerModel(modelBuilder, markerBuilder, Color.YELLOW);
+    this.upperMarker = new ModelInstance(yellowMarkerModel, 0, 0, -1);
+
+    markers.add(originMarker);
+    markers.add(leftMarker);
+    markers.add(upperMarker);
 
     float gridY = -0.01f;
     float gridX = -4f;
@@ -68,13 +84,20 @@ public class GridMarker extends BaseApplication {
     grid = new ModelInstance(gridModel, 0, gridY, 0);
   }
 
+  private Model getMarkerModel(ModelBuilder modelBuilder, MarkerBuilder markerBuilder, Color blue) {
+    return markerBuilder.color(blue).circleMarker(modelBuilder, 0.1f);
+  }
+
   public void display(Graphics3D graphics3D) {
     Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
     Gdx.gl.glClearColor(0, 0, 0, 1f);
 
     modelBatch.begin(camera);
-    modelBatch.render(marker, environment);
     modelBatch.render(grid, environment);
+
+    for (ModelInstance marker : markers) {
+      modelBatch.render(marker, environment);
+    }
 
     modelBatch.end();
   }

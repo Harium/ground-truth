@@ -54,7 +54,9 @@ public class CircleMarker extends BaseApplication {
     modelBatch = new ModelBatch();
     ModelBuilder modelBuilder = new ModelBuilder();
 
-    Model markerModel = MarkerBuilder.circleMarker(modelBuilder, 0.1f);
+    MarkerBuilder markerBuilder = new MarkerBuilder();
+
+    Model markerModel = markerBuilder.circleMarker(modelBuilder, 0.1f);
     this.marker = new ModelInstance(markerModel, 0, 0, 0);
 
     float gridY = -0.01f;

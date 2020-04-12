@@ -4,6 +4,7 @@ import com.harium.propan.Propan;
 import com.harium.propan.core.context.ApplicationGL;
 import examples.apps.markers.CircleMarker;
 import examples.apps.markers.GridMarker;
+import examples.apps.markers.MultipleCircleMarker;
 
 public class Main extends Propan {
 
@@ -21,6 +22,7 @@ public class Main extends Propan {
     //return new Rays(w, h);
     // Markers
     //return new CircleMarker(w, h);
-    return new GridMarker(w, h);
+    //return new GridMarker(w, h);
+    return new MultipleCircleMarker(w, h);
   }
 }
