@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.Pixmap;
 import com.badlogic.gdx.graphics.PixmapIO;
 import com.badlogic.gdx.utils.BufferUtils;
 import com.badlogic.gdx.utils.ScreenUtils;
+import com.harium.etyl.commons.event.KeyEvent;
 import com.harium.propan.core.context.ApplicationGL;
 
 public abstract class BaseApplication extends ApplicationGL {
@@ -35,6 +36,8 @@ public abstract class BaseApplication extends ApplicationGL {
 
     PixmapIO.writePNG(file, pixmap);
     pixmap.dispose();
+
+    System.out.println("Photo taken: " + filename);
   }
 
   private String getClassName() {
@@ -56,5 +59,12 @@ public abstract class BaseApplication extends ApplicationGL {
 
   protected String getFilename() {
     return getClassName();
+  }
+
+  @Override
+  public void updateKeyboard(KeyEvent event) {
+    if (event.isKeyUp(KeyEvent.VK_P)) {
+      takeScreenShot();
+    }
   }
 }

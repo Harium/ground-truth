@@ -109,7 +109,7 @@ public class MultipleCircleMarker extends BaseApplication {
 
   @Override
   protected String getFilename() {
-    return "r02x-05y075z-2";
+    return "multiple-" + System.currentTimeMillis();
   }
 
   @Override
