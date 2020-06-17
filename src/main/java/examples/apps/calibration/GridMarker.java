@@ -57,7 +57,7 @@ public class GridMarker extends BaseApplication {
     modelBatch = new ModelBatch();
     ModelBuilder modelBuilder = new ModelBuilder();
 
-    Model markerModel = new MarkerBuilder().gridMarker(modelBuilder, 2, 4, 0.3f, 0.2f);
+    Model markerModel = new MarkerBuilder().gridMarker(modelBuilder, 4, 5, 0.3f, 0.2f);
     this.marker = new ModelInstance(markerModel, 0, 0, 0);
 
     float gridY = -0.01f;
@@ -86,7 +86,7 @@ public class GridMarker extends BaseApplication {
 
   @Override
   protected String getFilename() {
-    return "r02x-05y075z-2";
+    return "calibration";
   }
 
   @Override

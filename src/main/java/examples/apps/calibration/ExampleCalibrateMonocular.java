@@ -12,6 +12,8 @@ import boofcv.struct.calib.CameraPinholeBrown;
 import boofcv.struct.image.GrayF32;
 
 import java.awt.image.BufferedImage;
+import java.io.File;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -40,7 +42,7 @@ public class ExampleCalibrateMonocular {
 
     public static void main( String args[] ) {
         DetectorFiducialCalibration detector;
-        List<String> images;
+        List<File> images;
 
         // Regular Circle Example
 //		detector = FactoryFiducialCalibration.circleRegularGrid(null, new ConfigGridDimen(8, 10, 1.5, 2.5));
@@ -51,12 +53,13 @@ public class ExampleCalibrateMonocular {
 //		images = UtilIO.listByPrefix(UtilIO.pathExample("calibration/mono/Sony_DSC-HX5V_CircleHexagonal"),"image", null);
 
         // Square Grid example
-//		detector = FactoryFiducialCalibration.squareGrid(null, new ConfigGridDimen(4, 3, 30, 30));
-//		images = UtilIO.listByPrefix(UtilIO.pathExample("calibration/stereo/Bumblebee2_Square"),"left", null);
+		detector = FactoryFiducialCalibration.squareGrid(null, new ConfigGridDimen(4, 5, SIZE_IN_MM, 20));
+		//images = UtilIO.listByPrefix(UtilIO.pathExample("screenshots/calibration"),"calibration", null);
+        images = Arrays.asList(new File("screenshots/calibration").listFiles());
 
         // Chessboard Example
-        detector = FactoryFiducialCalibration.chessboardX(null,new ConfigGridDimen(7, 5, SIZE_IN_MM));
-        images = UtilIO.listByPrefix(UtilIO.pathExample("calibration/stereo/Bumblebee2_Chess"),"left", null);
+        //detector = FactoryFiducialCalibration.chessboardX(null,new ConfigGridDimen(7, 5, SIZE_IN_MM));
+        //images = UtilIO.listByPrefix(UtilIO.pathExample("calibration/stereo/Bumblebee2_Chess"),"left", null);
 
         // Declare and setup the calibration algorithm
         CalibrateMonoPlanar calibrationAlg = new CalibrateMonoPlanar(detector.getLayout());
@@ -64,8 +67,8 @@ public class ExampleCalibrateMonocular {
         // tell it type type of target and which parameters to estimate
         calibrationAlg.configurePinhole( true, 2, false);
 
-        for( String n : images ) {
-            BufferedImage input = UtilImageIO.loadImage(n);
+        for( File n : images ) {
+            BufferedImage input = UtilImageIO.loadImage(n.getAbsolutePath());
             if( input != null ) {
                 GrayF32 image = ConvertBufferedImage.convertFrom(input,(GrayF32)null);
                 if( detector.process(image)) {
@@ -79,7 +82,7 @@ public class ExampleCalibrateMonocular {
         CameraPinholeBrown intrinsic = calibrationAlg.process();
 
         // save results to a file and print out
-        CalibrationIO.save(intrinsic, "intrinsic.yaml");
+        CalibrationIO.save(intrinsic, "calibration/intrinsic.yaml");
 
         calibrationAlg.printStatistics();
         System.out.println();
