@@ -1,4 +1,4 @@
-package examples.apps.markers;
+package examples.apps.calibration;
 
 import static com.harium.groundtruth.GridBuilder.buildGrid;
 
@@ -57,7 +57,7 @@ public class GridMarker extends BaseApplication {
     modelBatch = new ModelBatch();
     ModelBuilder modelBuilder = new ModelBuilder();
 
-    Model markerModel = new MarkerBuilder().gridMarker(modelBuilder, 2, 4, 0.1f);
+    Model markerModel = new MarkerBuilder().gridMarker(modelBuilder, 2, 4, 0.3f, 0.2f);
     this.marker = new ModelInstance(markerModel, 0, 0, 0);
 
     float gridY = -0.01f;

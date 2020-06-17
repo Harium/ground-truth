@@ -1,0 +1,90 @@
+package examples.apps.calibration;
+
+import boofcv.abst.fiducial.calib.ConfigGridDimen;
+import boofcv.abst.geo.calibration.CalibrateMonoPlanar;
+import boofcv.abst.geo.calibration.DetectorFiducialCalibration;
+import boofcv.factory.fiducial.FactoryFiducialCalibration;
+import boofcv.io.UtilIO;
+import boofcv.io.calibration.CalibrationIO;
+import boofcv.io.image.ConvertBufferedImage;
+import boofcv.io.image.UtilImageIO;
+import boofcv.struct.calib.CameraPinholeBrown;
+import boofcv.struct.image.GrayF32;
+
+import java.awt.image.BufferedImage;
+import java.util.List;
+
+/**
+ * Example of how to calibrate a single (monocular) camera using a high level interface. Depending on the calibration
+ * target detector and target type, the entire target might need to be visible in the image. All camera images
+ * should be in focus and that target evenly spread through out the images. In particular the edges of the image
+ * should be covered.
+ *
+ * After processing both intrinsic camera parameters and lens distortion are estimated.  Square grid and chessboard
+ * targets are demonstrated by this example. See calibration tutorial for a discussion of different target types
+ * and how to collect good calibration images.
+ *
+ * All the image processing and calibration is taken care of inside of {@link CalibrateMonoPlanar}.  The code below
+ * loads calibration images as inputs, calibrates, and saves results to an XML file.  See in code comments for tuning
+ * and implementation issues.
+ *
+ * Targets from: https://boofcv.org/index.php?title=Camera_Calibration_Targets
+ *
+ * @see CalibrateMonoPlanar
+ *
+ * @author Peter Abeles
+ */
+public class ExampleCalibrateMonocular {
+
+    public static final int SIZE_IN_MM = 30;
+
+    public static void main( String args[] ) {
+        DetectorFiducialCalibration detector;
+        List<String> images;
+
+        // Regular Circle Example
+//		detector = FactoryFiducialCalibration.circleRegularGrid(null, new ConfigGridDimen(8, 10, 1.5, 2.5));
+//		images = UtilIO.listByPrefix(UtilIO.pathExample("calibration/mono/Sony_DSC-HX5V_CircleRegular"),"image", null);
+
+        // Hexagonal Circle Example
+//		detector = FactoryFiducialCalibration.circleHexagonalGrid(null, new ConfigGridDimen(24, 28, 1, 1.2));
+//		images = UtilIO.listByPrefix(UtilIO.pathExample("calibration/mono/Sony_DSC-HX5V_CircleHexagonal"),"image", null);
+
+        // Square Grid example
+//		detector = FactoryFiducialCalibration.squareGrid(null, new ConfigGridDimen(4, 3, 30, 30));
+//		images = UtilIO.listByPrefix(UtilIO.pathExample("calibration/stereo/Bumblebee2_Square"),"left", null);
+
+        // Chessboard Example
+        detector = FactoryFiducialCalibration.chessboardX(null,new ConfigGridDimen(7, 5, SIZE_IN_MM));
+        images = UtilIO.listByPrefix(UtilIO.pathExample("calibration/stereo/Bumblebee2_Chess"),"left", null);
+
+        // Declare and setup the calibration algorithm
+        CalibrateMonoPlanar calibrationAlg = new CalibrateMonoPlanar(detector.getLayout());
+
+        // tell it type type of target and which parameters to estimate
+        calibrationAlg.configurePinhole( true, 2, false);
+
+        for( String n : images ) {
+            BufferedImage input = UtilImageIO.loadImage(n);
+            if( input != null ) {
+                GrayF32 image = ConvertBufferedImage.convertFrom(input,(GrayF32)null);
+                if( detector.process(image)) {
+                    calibrationAlg.addImage(detector.getDetectedPoints().copy());
+                } else {
+                    System.err.println("Failed to detect target in " + n);
+                }
+            }
+        }
+        // process and compute intrinsic parameters
+        CameraPinholeBrown intrinsic = calibrationAlg.process();
+
+        // save results to a file and print out
+        CalibrationIO.save(intrinsic, "intrinsic.yaml");
+
+        calibrationAlg.printStatistics();
+        System.out.println();
+        System.out.println("--- Intrinsic Parameters ---");
+        System.out.println();
+        intrinsic.print();
+    }
+}

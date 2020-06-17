@@ -15,6 +15,7 @@ import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.harium.etyl.commons.event.KeyEvent;
 import com.harium.groundtruth.FPSCameraControllerV2;
 import com.harium.groundtruth.MarkerBuilder;
+import com.harium.propan.FixedPerspectiveCamera;
 import com.harium.propan.core.graphics.Graphics3D;
 import examples.apps.BaseApplication;
 import java.util.ArrayList;
@@ -45,7 +46,7 @@ public class MultipleCircleMarker extends BaseApplication {
     environment = new Environment();
     environment.set(new ColorAttribute(ColorAttribute.AmbientLight, 1f, 1f, 1f, 1f));
 
-    camera = new PerspectiveCamera(FOV, w, h);
+    camera = new FixedPerspectiveCamera(FOV, w, h);
     camera.position.set(0, 2, 3);
     // Do not change it
     camera.lookAt(camera.position.x, camera.position.y, camera.position.z - 1);

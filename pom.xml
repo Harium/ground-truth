@@ -30,5 +30,16 @@
             <artifactId>etyl-gdx-lwjgl</artifactId>
             <version>1.1.0</version>
         </dependency>
+        <dependency>
+            <groupId>org.boofcv</groupId>
+            <artifactId>boofcv-recognition</artifactId>
+            <version>0.36.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.boofcv</groupId>
+            <artifactId>boofcv-io</artifactId>
+            <version>0.36.1</version>
+        </dependency>
+
     </dependencies>
 </project>
