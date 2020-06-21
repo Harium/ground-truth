@@ -5,7 +5,8 @@ import com.badlogic.gdx.math.Matrix4;
 import com.badlogic.gdx.math.Vector3;
 
 /**
- * TODO Delete normalizeUp when PR is accepted: https://github.com/libgdx/libgdx/pull/6078
+ * TODO Delete normalizeUp when PR is merged: https://github.com/libgdx/libgdx/pull/6078
+ * and a new libgdx version is published
  */
 public class FixedPerspectiveCamera extends PerspectiveCamera {
 
