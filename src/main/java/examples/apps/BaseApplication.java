@@ -31,14 +31,33 @@ public abstract class BaseApplication extends ApplicationGL {
             pixels[i - 1] = (byte) 255;
         }
 
-        Pixmap pixmap = new Pixmap(Gdx.graphics.getBackBufferWidth(),
-            Gdx.graphics.getBackBufferHeight(), Pixmap.Format.RGBA8888);
-        BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
-
-        PixmapIO.writePNG(file, pixmap);
-        pixmap.dispose();
+        writePNG(file, pixels);
 
         System.out.println("Photo taken: " + filename);
+    }
+
+    public void takeScreenShotTransparent() {
+        String id = "-" + System.currentTimeMillis();
+        String filename = getFilename() + id + ".png";
+        FileHandle file = Gdx.files.absolute("screenshots/" + filename);
+        if (file.exists()) {
+            return;
+        }
+
+        byte[] pixels = ScreenUtils.getFrameBufferPixels(0, 0, Gdx.graphics.getBackBufferWidth(),
+                                                         Gdx.graphics.getBackBufferHeight(), true);
+        writePNG(file, pixels);
+
+        System.out.println("Photo taken: " + filename);
+    }
+
+    private void writePNG(FileHandle file, byte[] pixels) {
+        Pixmap pixmap = new Pixmap(Gdx.graphics.getBackBufferWidth(),
+                                   Gdx.graphics.getBackBufferHeight(), Pixmap.Format.RGBA8888);
+
+        BufferUtils.copy(pixels, 0, pixmap.getPixels(), pixels.length);
+        PixmapIO.writePNG(file, pixmap);
+        pixmap.dispose();
     }
 
     private String getClassName() {

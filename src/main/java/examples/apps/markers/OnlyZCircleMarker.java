@@ -70,6 +70,8 @@ public class OnlyZCircleMarker extends BaseApplication {
     public void display(Graphics3D graphics3D) {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
         Gdx.gl.glClearColor(0, 0, 0, 1f);
+        // Transparent background
+        //Gdx.gl.glClearColor(0, 0, 0, 0f);
 
         modelBatch.begin(camera);
         for (ModelInstance marker : instances) {
