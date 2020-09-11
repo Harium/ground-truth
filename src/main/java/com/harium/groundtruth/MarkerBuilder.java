@@ -32,6 +32,21 @@ public class MarkerBuilder {
         return modelBuilder.end();
     }
 
+    public Model tile(ModelBuilder modelBuilder, float size) {
+        return tile(modelBuilder, size, paperColor);
+    }
+
+    public Model tile(ModelBuilder modelBuilder, float size, Color color) {
+        modelBuilder.begin();
+
+        modelBuilder.node();
+        MeshPartBuilder mpb = modelBuilder
+                .part("tile", GL20.GL_TRIANGLES, 3, diffuseMaterial(color));
+        BoxShapeBuilder.build(mpb, 1, size, 1);
+
+        return modelBuilder.end();
+    }
+
     public Model gridMarker(ModelBuilder modelBuilder, int width, int height, float size) {
         return gridMarker(modelBuilder, width, height, size, 0.05f);
     }
