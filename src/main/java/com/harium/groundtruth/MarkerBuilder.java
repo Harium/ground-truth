@@ -51,6 +51,16 @@ public class MarkerBuilder {
         return gridMarker(modelBuilder, width, height, size, 0.05f);
     }
 
+    public Model box(ModelBuilder modelBuilder, float size, Color color) {
+        modelBuilder.begin();
+        modelBuilder.node();
+        MeshPartBuilder mpb = modelBuilder
+                .part("box", GL20.GL_TRIANGLES, 3, diffuseMaterial(color));
+        BoxShapeBuilder.build(mpb, size, size, size);
+
+        return modelBuilder.end();
+    }
+
     public Model gridMarker(ModelBuilder modelBuilder, int width, int height, float size, float spacing) {
         modelBuilder.begin();
 

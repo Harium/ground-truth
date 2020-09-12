@@ -69,7 +69,7 @@ public class Room extends BaseApplication {
         instances.add(right);
     }
 
-    private ModelInstance buildTile(int x, int y, Color color) {
+    public static ModelInstance buildTile(int x, int y, Color color) {
         ModelBuilder modelBuilder = new ModelBuilder();
         MarkerBuilder markerBuilder = new MarkerBuilder();
         Model markerModel = markerBuilder.tile(modelBuilder, TILE_HEIGHT, color);
