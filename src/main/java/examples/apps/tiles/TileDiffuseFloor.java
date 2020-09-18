@@ -57,7 +57,7 @@ public class TileDiffuseFloor extends BaseApplication {
         ModelBuilder modelBuilder = new ModelBuilder();
         MarkerBuilder markerBuilder = new MarkerBuilder();
         Model markerModel = markerBuilder.tile(modelBuilder, color);
-        ModelInstance marker = new ModelInstance(markerModel, x, y, 0);
+        ModelInstance marker = new ModelInstance(markerModel, x, 0, y);
 
         return marker;
     }
