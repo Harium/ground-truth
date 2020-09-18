@@ -1,4 +1,4 @@
-package examples.apps.room;
+package examples.apps.tiles;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Color;
@@ -10,7 +10,6 @@ import com.badlogic.gdx.graphics.g3d.ModelBatch;
 import com.badlogic.gdx.graphics.g3d.ModelInstance;
 import com.badlogic.gdx.graphics.g3d.attributes.ColorAttribute;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
-import com.badlogic.gdx.math.Vector3;
 import com.harium.etyl.commons.event.KeyEvent;
 import com.harium.groundtruth.FPSCameraControllerV2;
 import com.harium.groundtruth.MarkerBuilder;
@@ -20,11 +19,9 @@ import examples.apps.BaseApplication;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Room extends BaseApplication {
+public class TileDiffuseFloor extends BaseApplication {
 
     protected static final float FOV = 60;
-    // 1 cm
-    public static final float TILE_HEIGHT = 0.01f;
 
     protected ModelBatch modelBatch;
     protected Environment environment;
@@ -33,7 +30,7 @@ public class Room extends BaseApplication {
 
     protected List<ModelInstance> instances = new ArrayList<>();
 
-    public Room(int w, int h) {
+    public TileDiffuseFloor(int w, int h) {
         super(w, h);
     }
 
@@ -53,28 +50,14 @@ public class Room extends BaseApplication {
         modelBatch = new ModelBatch();
 
         // Floor
-        instances.add(buildTile(0, 0, Color.WHITE));
-
-        // Back
-        ModelInstance back = buildTile(0, 0, Color.BLUE);
-        back.transform.translate(0,0.5f, 0.5f);
-        back.transform.rotate(Vector3.X, 90);
-        instances.add(back);
-
-        // Right
-        ModelInstance right = buildTile(0, 0, Color.RED);
-        right.transform.translate(0.5f,0.5f,0);
-        right.transform.rotate(Vector3.Y, 90);
-        right.transform.rotate(Vector3.X, 90);
-        instances.add(right);
+        instances.add(buildTile(0, 0, Color.RED));
     }
 
     public static ModelInstance buildTile(int x, int y, Color color) {
         ModelBuilder modelBuilder = new ModelBuilder();
         MarkerBuilder markerBuilder = new MarkerBuilder();
-        Model markerModel = markerBuilder.tileBox(modelBuilder, TILE_HEIGHT, color);
-        ModelInstance marker = new ModelInstance(markerModel, x, y, TILE_HEIGHT);
-        //marker.transform.rotate(Vector3.X, 90);
+        Model markerModel = markerBuilder.tile(modelBuilder, color);
+        ModelInstance marker = new ModelInstance(markerModel, x, y, 0);
 
         return marker;
     }

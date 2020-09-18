@@ -3,15 +3,21 @@ package com.harium.groundtruth;
 import static com.harium.groundtruth.MaterialLibrary.diffuseMaterial;
 import static com.harium.groundtruth.MaterialLibrary.inkMaterial;
 import static com.harium.groundtruth.MaterialLibrary.paperMaterial;
+import static com.harium.groundtruth.MaterialLibrary.textureMaterial;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.ModelBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.shapebuilders.BoxShapeBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.shapebuilders.CylinderShapeBuilder;
+import com.badlogic.gdx.math.Vector3;
 
+/**
+ * More info at: https://github.com/libgdx/libgdx/wiki/ModelBuilder,-MeshBuilder-and-MeshPartBuilder
+ */
 public class MarkerBuilder {
 
     private float markerSize = 0.001f;
@@ -32,17 +38,54 @@ public class MarkerBuilder {
         return modelBuilder.end();
     }
 
-    public Model tile(ModelBuilder modelBuilder, float size) {
-        return tile(modelBuilder, size, paperColor);
+    public Model tileBox(ModelBuilder modelBuilder, float size) {
+        return tileBox(modelBuilder, size, paperColor);
     }
 
-    public Model tile(ModelBuilder modelBuilder, float size, Color color) {
+    public Model tileBox(ModelBuilder modelBuilder, float size, Color color) {
         modelBuilder.begin();
 
         modelBuilder.node();
         MeshPartBuilder mpb = modelBuilder
                 .part("tile", GL20.GL_TRIANGLES, 3, diffuseMaterial(color));
         BoxShapeBuilder.build(mpb, 1, size, 1);
+
+        return modelBuilder.end();
+    }
+
+    public Model tile(ModelBuilder modelBuilder, Color color) {
+        modelBuilder.begin();
+
+        modelBuilder.node();
+        MeshPartBuilder mpb = modelBuilder
+                .part("tile", GL20.GL_TRIANGLES, 3, diffuseMaterial(color));
+
+        mpb.setColor(color);
+        mpb.setUVRange(0f, 1, 1, 0);
+        Vector3 a = new Vector3(-0.5f, 0, 0.5f);
+        Vector3 b = new Vector3(0.5f, 0, 0.5f);
+        Vector3 c = new Vector3(0.5f, 0, -0.5f);
+        Vector3 d = new Vector3(-0.5f, 0, -0.5f);
+        Vector3 normal = new Vector3(Vector3.Y);
+        mpb.rect(a, b, c, d, normal);
+
+        return modelBuilder.end();
+    }
+
+    public Model tile(ModelBuilder modelBuilder, Texture texture) {
+        modelBuilder.begin();
+
+        modelBuilder.node();
+        MeshPartBuilder mpb = modelBuilder
+                .part("tile", GL20.GL_TRIANGLES, 3, textureMaterial(texture));
+
+        mpb.setUVRange(0f, 1, 1, 0);
+        Vector3 a = new Vector3(-0.5f, 0, 0.5f);
+        Vector3 b = new Vector3(0.5f, 0, 0.5f);
+        Vector3 c = new Vector3(0.5f, 0, -0.5f);
+        Vector3 d = new Vector3(-0.5f, 0, -0.5f);
+        Vector3 normal = new Vector3(Vector3.Y);
+        mpb.rect(a, b, c, d, normal); // the last three arguments specify the normal*/
 
         return modelBuilder.end();
     }
