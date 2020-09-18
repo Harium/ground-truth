@@ -1,7 +1,6 @@
 package examples.apps.tiles;
 
 import com.badlogic.gdx.Gdx;
-import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.PerspectiveCamera;
 import com.badlogic.gdx.graphics.Texture;
@@ -16,12 +15,9 @@ import com.harium.groundtruth.FPSCameraControllerV2;
 import com.harium.groundtruth.MarkerBuilder;
 import com.harium.propan.core.graphics.Graphics3D;
 import examples.apps.BaseApplication;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 import java.util.List;
-
-import static examples.apps.tiles.TileDiffuseFloor.buildTile;
 
 public class TileTextureFloor extends BaseApplication {
 
@@ -34,7 +30,8 @@ public class TileTextureFloor extends BaseApplication {
 
     protected List<ModelInstance> instances = new ArrayList<>();
 
-    private Texture texture;
+    private Texture grassTexture;
+    private Texture concreteTexture;
 
     public TileTextureFloor(int w, int h) {
         super(w, h);
@@ -56,15 +53,26 @@ public class TileTextureFloor extends BaseApplication {
         modelBatch = new ModelBatch();
 
         // Floor
-        texture = new Texture(Gdx.files.internal("grass_001/grass_001_color.jpg"));
-        instances.add(buildTile(0, 0, texture));
+        grassTexture = new Texture(Gdx.files.internal("grass_001/grass_001_color.jpg"));
+        instances.add(buildTile(0, 0, grassTexture));
+        instances.add(buildTile(1, 0, grassTexture));
+        instances.add(buildTile(2, 0, grassTexture));
+
+        concreteTexture = new Texture(Gdx.files.internal("concrete_012/concrete_012_color.jpg"));
+        instances.add(buildTile(0, -1, concreteTexture));
+        instances.add(buildTile(1, -1, concreteTexture));
+        instances.add(buildTile(2, -1, concreteTexture));
+        
+        instances.add(buildTile(0, 1, concreteTexture));
+        instances.add(buildTile(1, 1, concreteTexture));
+        instances.add(buildTile(2, 1, concreteTexture));
     }
 
-    public static ModelInstance buildTile(int x, int y, Texture texture) {
+    public static ModelInstance buildTile(int x, int y, Texture diffuse) {
         ModelBuilder modelBuilder = new ModelBuilder();
         MarkerBuilder markerBuilder = new MarkerBuilder();
-        Model markerModel = markerBuilder.tile(modelBuilder, texture);
-        ModelInstance marker = new ModelInstance(markerModel, x, y, 0);
+        Model markerModel = markerBuilder.tile(modelBuilder, diffuse);
+        ModelInstance marker = new ModelInstance(markerModel, x, 0, y);
 
         return marker;
     }
