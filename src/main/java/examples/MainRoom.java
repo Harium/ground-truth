@@ -2,6 +2,7 @@ package examples;
 
 import com.harium.propan.Propan;
 import com.harium.propan.core.context.ApplicationGL;
+import examples.apps.room.MirrorRoom;
 import examples.apps.room.Room;
 
 public class MainRoom extends Propan {
@@ -17,6 +18,7 @@ public class MainRoom extends Propan {
   }
 
   public ApplicationGL startApplication() {
-    return new Room(w, h);
+    //return new Room(w, h);
+    return new MirrorRoom(w, h);
   }
 }
