@@ -34,34 +34,34 @@ public class CubeSkybox {
 
     public void init() {
         bottomTile = buildTile(bottom);
-        bottomTile.transform.translate(0, -scale *0.5f , 0);
+        bottomTile.transform.translate(0, -scale * 0.5f, 0);
         bottomTile.transform.scl(scale);
 
         topTile = buildTile(top);
-        topTile.transform.translate(0, scale *0.5f , 0);
+        topTile.transform.translate(0, scale * 0.5f, 0);
         topTile.transform.scl(scale);
         topTile.transform.rotate(Vector3.Y, 180);
         topTile.transform.rotate(Vector3.Z, 180);
 
         frontTile = buildTile(front);
-        frontTile.transform.translate(0, 0, scale *0.5f);
+        frontTile.transform.translate(0, 0, scale * 0.5f);
         frontTile.transform.scl(scale);
         frontTile.transform.rotate(Vector3.X, -90);
 
         rightTile = buildTile(right);
-        rightTile.transform.translate(-scale *0.5f, 0, 0);
+        rightTile.transform.translate(-scale * 0.5f, 0, 0);
         rightTile.transform.scl(scale);
         rightTile.transform.rotate(Vector3.X, -90);
         rightTile.transform.rotate(Vector3.Z, -90);
 
         leftTile = buildTile(left);
-        leftTile.transform.translate(scale *0.5f, 0, 0);
+        leftTile.transform.translate(scale * 0.5f, 0, 0);
         leftTile.transform.scl(scale);
         leftTile.transform.rotate(Vector3.X, -90);
         leftTile.transform.rotate(Vector3.Z, 90);
 
         backTile = buildTile(back);
-        backTile.transform.translate(0, 0, -scale *0.5f);
+        backTile.transform.translate(0, 0, -scale * 0.5f);
         backTile.transform.scl(scale);
         backTile.transform.rotate(Vector3.X, 90);
         backTile.transform.rotate(Vector3.Y, 180);
@@ -73,9 +73,8 @@ public class CubeSkybox {
         modelBuilder.begin();
 
         modelBuilder.node();
-        MeshPartBuilder mpb = modelBuilder
-                .part("tile", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal | VertexAttributes.Usage.TextureCoordinates,
-                      textureMaterial(texture));
+        MeshPartBuilder mpb = modelBuilder.part("tile", GL20.GL_TRIANGLES, VertexAttributes.Usage.Position | VertexAttributes.Usage.Normal
+                | VertexAttributes.Usage.TextureCoordinates, textureMaterial(texture));
 
         Vector3 a = new Vector3(-0.5f, 0, 0.5f);
         Vector3 b = new Vector3(0.5f, 0, 0.5f);
