@@ -1,15 +1,13 @@
 package com.harium.groundtruth;
 
 import static com.badlogic.gdx.graphics.VertexAttributes.*;
-import static com.harium.groundtruth.MaterialLibrary.diffuseMaterial;
-import static com.harium.groundtruth.MaterialLibrary.inkMaterial;
-import static com.harium.groundtruth.MaterialLibrary.paperMaterial;
-import static com.harium.groundtruth.MaterialLibrary.textureMaterial;
+import static com.harium.groundtruth.MaterialLibrary.*;
 
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.VertexAttributes;
+import com.badlogic.gdx.graphics.g3d.Material;
 import com.badlogic.gdx.graphics.g3d.Model;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder;
 import com.badlogic.gdx.graphics.g3d.utils.MeshPartBuilder.VertexInfo;
@@ -76,11 +74,25 @@ public class MarkerBuilder {
     }
 
     public Model tile(ModelBuilder modelBuilder, Texture diffuse) {
+        return tile(modelBuilder, textureMaterial(diffuse));
+    }
+
+    public Model tile(ModelBuilder modelBuilder, Texture diffuse, boolean alpha) {
+        Material material;
+        if (alpha) {
+            material = textureAlphaMaterial(diffuse);
+        } else {
+            material = textureMaterial(diffuse);
+        }
+        return tile(modelBuilder, material);
+    }
+
+    private Model tile(ModelBuilder modelBuilder, Material material) {
         modelBuilder.begin();
 
         modelBuilder.node();
         MeshPartBuilder mpb = modelBuilder
-                .part("tile", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal | Usage.TextureCoordinates, textureMaterial(diffuse));
+                .part("tile", GL20.GL_TRIANGLES, Usage.Position | Usage.Normal | Usage.TextureCoordinates, material);
 
         Vector3 a = new Vector3(-0.5f, 0, 0.5f);
         Vector3 b = new Vector3(0.5f, 0, 0.5f);
